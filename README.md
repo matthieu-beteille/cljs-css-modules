@@ -1,31 +1,36 @@
-# cljs-css-modules
+# Css Modules in ClojureScript
 
-First, if you don't know what's a css modules, here is the specification (you should read it first):  
+[![Clojars Project](https://img.shields.io/clojars/v/cljs-css-modules.svg)](https://clojars.org/cljs-css-modules)
+
+First if you don't know what's a css modules, you should definitely read the specification:
 https://github.com/css-modules/css-modules
 
-
-In cljs you won't write pure CSS, but you'll use [garden](https://github.com/noprompt/garden) to write your style in cljs.
-(It basically allows you to use any feature of pure css, so no worries you're not losing any power here).
+Using cljs-css-modules, you won't write pure CSS, but you'll use [garden](https://github.com/noprompt/garden) syntax to write your style in ClojureScript.   
+([Garden](https://github.com/noprompt/garden) basically allows you to use any feature of pure css, so no worries you're not losing any power here).
 
 The idea of cljs-css-modules is to localise every classes and animations you define through the ```defstyle``` macro.
 
 ## Usage
 
+Add this to your ```project.clj```:  
+
+<img src="https://clojars.org/cljs-css-modules/latest-version.svg"/>
+
 You need to define your style using the ```defstyle``` macro.
 
-Your style will be written using [garden](https://github.com/noprompt/garden) syntax, so spend some time to check it out: https://github.com/noprompt/garden
+Your style will be written using [garden](https://github.com/noprompt/garden) syntax, so spend some time reading the [doc](https://github.com/noprompt/garden).
 
-Each time you'll define some style using ```style```, this style will be  localised (class, and animations), translated to CSS,
+Each time you'll define some style using ```defstyle```, this style will be localised (classes, and animations), translated to CSS,
 and automatically injected into the ```<head>``` tag. This works perfectly with figwheel, and you'll get live style reloading out of the box.
 
-(If you come from javascript and you've used webpack before, it replaces *css-loader*, and *style-loader*)
+(If you come from the javascript world and you've used webpack before, it replaces both *css-loader* and *style-loader*).
 
-Example:
+*Example:*
 
 Define your style:
 
-```
-(ns yourapp.ns1
+```Clojure
+(ns yourapp.namespace1
   (:require [cljs-css-modules.macro :refer-macros [defstyle]]))
 
 (defstyle style
@@ -50,13 +55,15 @@ Define your style:
 
 The localised classes will be available in the style object created.
 
-```(:container style) ;; => returns the unique generated class for ".container"```
+```Clojure
+(:container style) ;; => returns the unique generated class for ".container"
+```
 
 To use your style, you just need to inject them wherever you need:
 
 For instance with reagent:
 
-```
+```Clojure
 (defn simple-component []
   [:div {:class-name (:container style)}
    [:h1 {:class-name (:title style)} "I am a big title"]
@@ -64,6 +71,12 @@ For instance with reagent:
    [:p {:class-name (:text style)}
     "Here goes some random text"]])
 ```
+
+## TODO
+
+- add tests
+- add CI
+- compose feature?
 
 ## License
 
