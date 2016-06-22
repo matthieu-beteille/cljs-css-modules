@@ -77,7 +77,7 @@
 
 (defmacro defstyle
   [style-id style]
-  (let [inject-style-fn (symbol "sales.runtime" "inject-style!")
+  (let [inject-style-fn (symbol "cljs-css-modules.runtime" "inject-style!")
         id (gensym)
         processed-style (into []  (map (partial process-style id) style))
         style (into [] (map create-garden-style processed-style))
