@@ -8,7 +8,7 @@ https://github.com/css-modules/css-modules
 Using cljs-css-modules, you won't write pure CSS, but you'll use [garden](https://github.com/noprompt/garden) syntax to write your style in ClojureScript.   
 ([Garden](https://github.com/noprompt/garden) basically allows you to use any feature of pure css, so no worries you're not losing any power here).
 
-The idea of cljs-css-modules is to localise every classes and animations you define through the ```defstyle``` macro.
+The idea of cljs-css-modules is to localise every classes (and soon animations) you define through the ```defstyle``` macro.
 
 ## Usage
 
@@ -20,7 +20,7 @@ You need to define your style using the ```defstyle``` macro.
 
 Your style will be written using [garden](https://github.com/noprompt/garden) syntax, so spend some time reading the [doc](https://github.com/noprompt/garden).
 
-Each time you'll define some style using ```defstyle```, this style will be localised (classes, and animations), translated to CSS,
+Each time you'll define some style using ```defstyle```, this style will be localised (every classes (and soon every animations)), translated to CSS,
 and automatically injected into the ```<head>``` tag. This works perfectly with figwheel, and you'll get live style reloading out of the box.
 
 (If you come from the javascript world and you've used webpack before, it replaces both *css-loader* and *style-loader*).
@@ -45,12 +45,8 @@ Define your style:
    [".title" {:background-color "blue"
               :font-size 60}]
 
-   ["@keyframes test" {:start 60}]
-
-   ; that's how you can re-use a defined animation
    [".title2" {:font-size 40
-               :color "red"
-               :animation (str (:test style) " 1s loop")}]])
+               :color "red"}]])
 ```
 
 The localised classes will be available in the style object created.
@@ -74,6 +70,7 @@ For instance with reagent:
 
 ## TODO
 
+- localise keyframes
 - add tests
 - add CI
 - compose feature?
