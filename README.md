@@ -12,7 +12,7 @@ The idea of cljs-css-modules is to localise every classes (and soon animations) 
 
 ## Example Project
 
-gmp26 put together a repository porting an original css-modules project over to a cljs-css-modules/cljs one.
+gmp26 put together a repository porting a css-modules project over to a cljs-css-modules/cljs one.
 
 You can check it out, to see how this library can be used in a real project:
 
