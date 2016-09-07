@@ -10,6 +10,17 @@ Using cljs-css-modules, you won't write pure CSS, but you'll use [garden](https:
 
 The idea of cljs-css-modules is to localise every classes (and soon animations) you define through the ```defstyle``` macro.
 
+## Example Project
+
+gmp26 put together a repository porting an original css-modules project over to a cljs-css-modules/cljs one.
+
+You can check it out, to see how this library can be used in a real project:
+
+- Original JS Repo:
+https://github.com/css-modules/webpack-demo
+- CLJS Repo:
+https://github.com/gmp26/css-modules-tester
+
 ## Usage
 
 Add this to your ```project.clj```:  
@@ -71,8 +82,6 @@ For instance with reagent:
 ## TODO
 
 - localise keyframes
-- add tests
-- add CI
 - compose feature?
 
 ## License
