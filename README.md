@@ -53,6 +53,9 @@ Define your style:
    [".text" {:font-size 14
              :color "brown"}]
 
+   ["@keyframes keyframe" [:from {:a 50}]
+                          [:to  {:b 50}]]
+
    [".title" {:background-color "blue"
               :font-size 60}]
 
@@ -60,7 +63,7 @@ Define your style:
                :color "red"}]])
 ```
 
-The localised classes will be available in the style object created.
+The localised classes/keyframes will be available in the style object created.
 
 ```Clojure
 (:container style) ;; => returns the unique generated class for ".container"
@@ -81,8 +84,7 @@ For instance with reagent:
 
 ## TODO
 
-- localise keyframes
-- compose feature?
+- document components
 
 ## License
 
