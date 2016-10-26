@@ -38,15 +38,16 @@
 
 (deftest get-class-key
   (testing "It should create a symbol key with the name of the class"
-    (is (= :class (get-selector-key ".class" class-object)))
-    (is (= :class (get-selector-key ".class[foo=bla]" class-object)))
-    (is (= :class (get-selector-key ".class#id" class-object)))
-    (is (= :class (get-selector-key ".class:pseudoclass" class-object)))
-    (is (= :class1 (get-selector-key ".class1.class2" class-object)))
-    (is (= :class (get-selector-key ".class > selector" class-object)))
-    (is (= :class (get-selector-key ".class + selector" class-object)))
-    (is (= :class (get-selector-key ".class selector" class-object)))
-    (is (= :class (get-selector-key ".class" class-object)))))
+    (are [key selector] (= key (get-selector-key selector class-object))
+    :class ".class"
+    :class ".class[foo=bla]"
+    :class ".class#id"
+    :class ".class:pseudoclass"
+    :class1 ".class1.class2"
+    :class ".class > selector"
+    :class ".class + selector"
+    :class ".class selector"
+    :class ".class")))
 
 (deftest get-class-value
   (testing "It should create a value key with the name of the class (without the .)"
@@ -62,7 +63,7 @@
 
 (deftest localise-keyframe
   (testing "It should localise a keyframe properly"
-    (is (= "@keyframes test--id" (localise-selector "id" "@keyframes test" keyframe-object)))))
+    (is (= "test--id" (localise-selector "id" "@keyframes test" keyframe-object)))))
 
 (deftest get-keyframe-key
   (testing "It should create a symbol key with the name of the keyframe"
@@ -73,18 +74,62 @@
 
 (deftest defstyle-macro
   (testing "defstyle macro should return a map containing an id for each class "
-    (let [{:keys [map css] :as style} (defstyle test [[.class-1 {:margin "50px"}]
-                                                      ["@keyframes keyframe-test" [:from {:a 50}]
-                                                                                   [:to  {:b 50}]]
-                                                      ["#id-test" {:margin dix}]
-                                                      [.class-2 .lol {:margin "50px"}]
-                                                      [.class-3 {:margin-top "60px"
-                                                                :padding "50px"}]] true)]
-      (is (contains? map :class-1))
-      (is (contains? map :class-2))
-      (is (contains? map :class-3))
-      (is (contains? map :keyframe-test))
-      (is (= (count map) 4)))))
+    (let [{:keys [map css] :as style} (defstyle test
+                                        {:pretty-print? false}
+                                        (at-keyframes "keyframe-1"
+                                                      [:from {:top "50px"}]
+                                                      [:to  {:top "150px"}])
+                                        (at-media {:min-width "500px"
+                                                   :max-width "500px"}
+                                                  [:.query-test {:margin "60px"}
+                                                    [:&:hover {:color "black"}]]
+                                                  [:h2 {:padding "10px"}])
+                                        (at-keyframes "animation-1"
+                                                      [:from {:top "0px"}]
+                                                      [:to {:top "200px"}])
+                                        [".container" {:margin "50px"}
+                                          ["a" {:color "blue"}]]
+                                        [".class-1" {:margin "50px"}]
+                                        ["@keyframes keyframe-2" [:from {:margin "50px"}]
+                                                                  [:to  {:margin "100px"}]]
+                                        ["#ida" {:margin dix}]
+                                        [".class-2" ".lol" {:margin "50px"}]
+                                        [".class-3" {:margin-top "60px"
+                                                     :padding "50px"}] true)]
+      (is (= css
+             (str
+              "@keyframes keyframe-1--test{"
+              "from{top:50px}"
+              "to{top:150px}"
+              "}"
+              "@media(min-width:500px) and (max-width:500px){"
+              ".query-test--test{margin:60px}"
+              ".query-test--test:hover{color:black}"
+              "h2{padding:10px}"
+              "}"
+              "@keyframes animation-1--test{"
+              "from{top:0}"
+              "to{top:200px}"
+              "}"
+              ".container--test{margin:50px}"
+              ".container--test a{color:blue}"
+              ".class-1--test{margin:50px}"
+              "@keyframes keyframe-2--test{"
+              "from{margin:50px}to{margin:100px}"
+              "}"
+              "#ida{margin:10px}"
+              ".class-2--test,.lol{margin:50px}"
+              ".class-3--test{margin-top:60px;padding:50px}")))
+      (println css)
+      (is (= (:class-1 map) "class-1--test"))
+      (is (= (:class-2 map) "class-2--test"))
+      (is (= (:class-3 map) "class-3--test"))
+      (is (= (:query-test map) "query-test--test"))
+      (is (= (:keyframe-1 map) "keyframe-1--test"))
+      (is (= (:keyframe-2 map) "keyframe-2--test"))
+      (is (= (:container map) "container--test"))
+      (is (= (:animation-1 map) "animation-1--test"))
+      (is (= (count map) 8)))))
 
 ;; style components tests
 

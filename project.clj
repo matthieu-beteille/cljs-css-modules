@@ -1,4 +1,4 @@
-(defproject cljs-css-modules "0.2.0-SNAPSHOT"
+(defproject cljs-css-modules "0.2.0"
   :description "cljs-css-modules: css modules in clojurescript"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
