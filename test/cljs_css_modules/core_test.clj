@@ -120,7 +120,6 @@
               "#ida{margin:10px}"
               ".class-2--test,.lol{margin:50px}"
               ".class-3--test{margin-top:60px;padding:50px}")))
-      (println css)
       (is (= (:class-1 map) "class-1--test"))
       (is (= (:class-2 map) "class-2--test"))
       (is (= (:class-3 map) "class-3--test"))
