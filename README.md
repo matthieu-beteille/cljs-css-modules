@@ -103,11 +103,11 @@ Example:
 
 ```Clojure
 (defstyle style
-  (at-query {:max-width "400px"}
+  (at-media {:max-width "400px"}
 
             [".mobile-style" {:margin "5px"}])
 
-  (at-query {:min-width "400px"
+  (at-media {:min-width "400px"
              :max-width "800px"}
 
             [".tablet-style-1" {:margin "5px"}]
