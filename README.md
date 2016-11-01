@@ -146,10 +146,9 @@ This will localise all the animations, here: animation-1, animation-2, animation
 Note:
 Using cljs-css-modules, you don't need to import the at-keyframes function from garden's library. The macro will recognise the at-keyframes symbol.
 
-## TODO
+## Note
 
-- add more tests
-- document components
+You might want to consider https://github.com/mhallin/forest which is not based on garden and provides the same kind of features using its own DSL.
 
 ## License
 
