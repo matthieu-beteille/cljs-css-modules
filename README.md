@@ -146,6 +146,38 @@ This will localise all the animations, here: animation-1, animation-2, animation
 Note:
 Using cljs-css-modules, you don't need to import the at-keyframes function from garden's library. The macro will recognise the at-keyframes symbol.
 
+## From Clojure
+
+If you use the macro from clojure (and not clojurescript), it will define a map containing both the generated css and the map between original selectors and localised selectors.
+
+```Clojure
+(defstyle style
+
+  {:pretty-print? false}
+
+  (at-keyframes "animation-1"
+                [:from {:top "0px"}]
+                [:to {:top "200px"}])
+
+  (at-keyframes "animation-2"
+                [:from {:top "0px"}]
+                [:to {:top "250px"}])
+
+  ["@keyframes animation-3" [:from {:top "0px"}]
+                            [:to {:top "250px"}]])
+```
+
+In this case style would be the following map:
+
+```Clojure
+{:map {:animation-1 "animation-1--G__1524"
+       :animation-2 "animation-2--G__1524"
+       :animation-3 "animation-3--G__1524"}
+ :css "@keyframes animation-1--G__1524{from{top:0}to{top:200px}}@keyframes animation-2--G__1524{from{top:0}to{top:250px}}@keyframes animation-3--G__1524{from{top:0}to{top:250px}}"}
+```
+
+You can then do whatever you want with these, and use it for you server side rendered apps!
+
 ## Note
 
 You might want to consider https://github.com/mhallin/forest which is not based on garden and provides the same kind of features using its own DSL.
