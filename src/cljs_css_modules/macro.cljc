@@ -9,8 +9,10 @@
       [garden.stylesheet :refer [at-media at-keyframes]]
       [cljs-css-modules.runtime])))
 
-; TODO: define types and use cljs.spec
-; TODO: add some tests
+(defn cljs-env?
+  "Take the &env from a macro, and tell whether we are expanding into cljs."
+  [env]
+  (boolean (:ns env)))
 
 ; for now we localise only simple class and keyframes
 (def selectors-to-localise
@@ -167,11 +169,13 @@
                                     {:map {}
                                      :style []}
                                     style)]
-    (if test-flag
-      {:map map
-       :css `(apply ~css ~compiler-opts ~style)} ;useful for testing
+    (if (cljs-env? &env)
       `(do
          (def ~style-id ~map)
          (~inject-style-fn (apply ~css ~compiler-opts ~style)
            ~(str *ns*)
-           ~(name style-id))))))
+           ~(name style-id)))
+
+      `(def ~style-id
+            {:map ~map
+             :css (apply ~css ~compiler-opts ~style)}))))

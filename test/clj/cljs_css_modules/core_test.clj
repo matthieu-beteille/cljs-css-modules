@@ -1,7 +1,6 @@
 (ns cljs-css-modules.core-test
   (:require [clojure.test :refer :all]
             [cljs-css-modules.macro :refer :all]
-            [cljs-css-modules.macro :refer :all]
             [cljs-css-modules.macro-style-component :as comp]
             [cljs-css-modules.core :refer :all]))
 
@@ -74,28 +73,29 @@
 
 (deftest defstyle-macro
   (testing "defstyle macro should return a map containing an id for each class "
-    (let [{:keys [map css] :as style} (defstyle test
-                                        {:pretty-print? false}
-                                        (at-keyframes "keyframe-1"
-                                                      [:from {:top "50px"}]
-                                                      [:to  {:top "150px"}])
-                                        (at-media {:min-width "500px"
-                                                   :max-width "500px"}
-                                                  [:.query-test {:margin "60px"}
-                                                    [:&:hover {:color "black"}]]
-                                                  [:h2 {:padding "10px"}])
-                                        (at-keyframes "animation-1"
-                                                      [:from {:top "0px"}]
-                                                      [:to {:top "200px"}])
-                                        [".container" {:margin "50px"}
-                                          ["a" {:color "blue"}]]
-                                        [".class-1" {:margin "50px"}]
-                                        ["@keyframes keyframe-2" [:from {:margin "50px"}]
-                                                                  [:to  {:margin "100px"}]]
-                                        ["#ida" {:margin dix}]
-                                        [".class-2" ".lol" {:margin "50px"}]
-                                        [".class-3" {:margin-top "60px"
-                                                     :padding "50px"}] true)]
+    (defstyle test
+      {:pretty-print? false}
+      (at-keyframes "keyframe-1"
+                    [:from {:top "50px"}]
+                    [:to  {:top "150px"}])
+      (at-media {:min-width "500px"
+                 :max-width "500px"}
+                [:.query-test {:margin "60px"}
+                 [:&:hover {:color "black"}]]
+                [:h2 {:padding "10px"}])
+      (at-keyframes "animation-1"
+                    [:from {:top "0px"}]
+                    [:to {:top "200px"}])
+      [".container" {:margin "50px"}
+       ["a" {:color "blue"}]]
+      [".class-1" {:margin "50px"}]
+      ["@keyframes keyframe-2" [:from {:margin "50px"}]
+       [:to  {:margin "100px"}]]
+      ["#ida" {:margin dix}]
+      [".class-2" ".lol" {:margin "50px"}]
+      [".class-3" {:margin-top "60px"
+                   :padding "50px"}] true)
+    (let [{:keys [map css] :as style} test]
       (is (= css
              (str
               "@keyframes keyframe-1--test{"
@@ -129,6 +129,7 @@
       (is (= (:container map) "container--test"))
       (is (= (:animation-1 map) "animation-1--test"))
       (is (= (count map) 8)))))
+
 
 ;; style components tests
 
@@ -188,3 +189,21 @@
       (is (contains? map :container))
       (is (count map) 2)
       (is (string? css)))))
+
+
+(deftest defcomp-macro2
+  (testing "defstylecomponent"
+    (defstyle test
+      {:pretty-print? false}
+      (at-keyframes "animation-1"
+                    [:from {:top "0px"}]
+                    [:to {:top "200px"}])
+
+      (at-keyframes "animation-2"
+                    [:from {:top "0px"}]
+                    [:to {:top "250px"}])
+
+      ["@keyframes animation-3" [:from {:top "0px"}]
+       [:to {:top "250px"}]])
+    (let [style test]
+      (println style))))
