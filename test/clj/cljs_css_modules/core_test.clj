@@ -1,7 +1,6 @@
 (ns cljs-css-modules.core-test
   (:require [clojure.test :refer :all]
             [cljs-css-modules.macro :refer :all]
-            [cljs-css-modules.macro-style-component :as comp]
             [cljs-css-modules.core :refer :all]))
 
 ; style tests
@@ -129,81 +128,3 @@
       (is (= (:container map) "container--test"))
       (is (= (:animation-1 map) "animation-1--test"))
       (is (= (count map) 8)))))
-
-
-;; style components tests
-
-(deftest join-keywords
-  (testing "join-keywords"
-    (is (= (comp/join-keywords "-" [:symbol1 :symbol2])
-           :symbol1-symbol2))))
-
-(deftest defcomp-macro
-  (testing "defstylecomponent"
-    (let [{:keys [map css] :as res} (comp/defstylecomponent test
-
-                                                   [{:id :mobile
-                                                     :max-width mobile}
-                                                    {:id :tablet
-                                                     :min-width 400}
-                                                    {:id :desktop
-                                                     :min-width 800}]
-
-                                                   {:header {:margin-top dix
-                                                             :padding "60px"
-                                                             :hover {:color "black"}
-                                                             :mobile {:margin "50px"}
-                                                             :tablet {:padding "70px"
-                                                                      :active {:color "green"}
-                                                                      :hover {:padding "100px"}}
-                                                             :desktop {:margin "100px"}}
-                                                    :container {:desktop {:margin-top 80}
-                                                                :mobile {:margin-top 50}
-                                                                :margin-top "10px"
-                                                                :tablet {:margin-bottom 60}
-                                                                :hover {:color "black"}}} true)]
-      (is (= css (str ".header-test-id{margin-top:10px;padding:60px}"
-                      ".header-test-id:hover{color:black}"
-                      "@media(max-width:200){"
-                      ".header-test-id{margin:50px}"
-                      "}"
-                      "@media(min-width:400){"
-                      ".header-test-id{padding:70px}"
-                      ".header-test-id:active{color:green}"
-                      ".header-test-id:hover{padding:100px}"
-                      "}"
-                      "@media(min-width:800){.header-test-id{margin:100px}}"
-                      ".container-test-id{margin-top:10px}"
-                      ".container-test-id:hover{color:black}"
-                      "@media(max-width:200){"
-                      ".container-test-id{margin-top:50}}"
-                      "@media(min-width:400){"
-                      ".container-test-id{margin-bottom:60}"
-                      "}"
-                      "@media(min-width:800){"
-                      ".container-test-id{margin-top:80}"
-                      "}")))
-      (is (= map {:container "container-test-id"
-                  :header "header-test-id"}))
-      (is (contains? map :header))
-      (is (contains? map :container))
-      (is (count map) 2)
-      (is (string? css)))))
-
-
-(deftest defcomp-macro2
-  (testing "defstylecomponent"
-    (defstyle test
-      {:pretty-print? false}
-      (at-keyframes "animation-1"
-                    [:from {:top "0px"}]
-                    [:to {:top "200px"}])
-
-      (at-keyframes "animation-2"
-                    [:from {:top "0px"}]
-                    [:to {:top "250px"}])
-
-      ["@keyframes animation-3" [:from {:top "0px"}]
-       [:to {:top "250px"}]])
-    (let [style test]
-      (println style))))
