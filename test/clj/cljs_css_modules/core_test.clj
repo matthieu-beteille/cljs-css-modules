@@ -72,7 +72,7 @@
 
 (deftest defstyle-macro
   (testing "defstyle macro should return a map containing an id for each class "
-    (defstyle test
+    (defstyle test-style
       {:pretty-print? false}
       (at-keyframes "keyframe-1"
                     [:from {:top "50px"}]
@@ -94,7 +94,7 @@
       [".class-2" ".lol" {:margin "50px"}]
       [".class-3" {:margin-top "60px"
                    :padding "50px"}] true)
-    (let [{:keys [map css] :as style} test]
+    (let [{:keys [map css] :as style} test-style]
       (is (= css
              (str
               "@keyframes keyframe-1--test{"
