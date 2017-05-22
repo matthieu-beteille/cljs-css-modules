@@ -14,6 +14,25 @@
   [env]
   (boolean (:ns env)))
 
+(def ^:private pseudo-gensym-id
+  "The pseudo-gensym atom"
+  (atom 0))
+
+(defn- pseudo-gensym-nextid
+  "Increments the pseudo-gensym atom and returns the new value"
+  []
+  (swap! pseudo-gensym-id inc))
+
+(defn pseudo-gensym-reset
+  "Resets the pseudo-gensym atom"
+  []
+  (reset! pseudo-gensym-id 0))
+
+(defn pseudo-gensym
+  "Independent version of gensym. This allows generating the same classes in both client and server"
+  ([] (pseudo-gensym "PG__"))
+  ([prefix-string] (. clojure.lang.Symbol (intern (str prefix-string (str (pseudo-gensym-nextid)))))))
+
 ; for now we localise only simple class and keyframes
 (def selectors-to-localise
   [{:id :class
@@ -164,7 +183,7 @@
                 :else style)
         css (symbol "garden.core" "css")
         inject-style-fn (symbol "cljs-css-modules.runtime" "inject-style!")
-        id (if test-flag "test" (gensym))
+        id (if test-flag "test" (pseudo-gensym))
         {:keys [style map]} (reduce (partial create-garden-style id)
                                     {:map {}
                                      :style []}
